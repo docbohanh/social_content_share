@@ -63,6 +63,8 @@ public class FlutterSocialContentSharePlugin implements FlutterPlugin, MethodCal
   private Intent shareIntent;
   private static final String INSTAGRAM_PACKAGE_NAME = "com.instagram.android";
   private static final String WHATSAPP_PACKAGE_NAME = "com.whatsapp";
+  private final static String FACEBOOK_PACKAGE_NAME = "com.facebook.katana";
+  private final static String TWITTER_PACKAGE_NAME = "com.twitter.android";
 
   private String type;
   private String quote;
@@ -149,6 +151,7 @@ public class FlutterSocialContentSharePlugin implements FlutterPlugin, MethodCal
                 if (instagramInstalled()) {
                   shareFileToInstagram(result);
                 }else{
+                  openPlayStore(INSTAGRAM_PACKAGE_NAME);
                   result.success("Instagram app is not installed on your device");
                 }
 
@@ -266,6 +269,18 @@ public class FlutterSocialContentSharePlugin implements FlutterPlugin, MethodCal
       return false;
     }
     return false;
+  }
+
+  private void openPlayStore(String packageName) {
+    try {
+        final Uri playStoreUri = Uri.parse("market://details?id=" + packageName);
+        final Intent intent = new Intent(Intent.ACTION_VIEW, playStoreUri);
+        activity.startActivity(intent);
+    } catch (ActivityNotFoundException e) {
+        final Uri playStoreUri = Uri.parse("https://play.google.com/store/apps/details?id=" + packageName);
+        final Intent intent = new Intent(Intent.ACTION_VIEW, playStoreUri);
+        activity.startActivity(intent);
+    }
   }
 
 
